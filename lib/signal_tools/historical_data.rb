@@ -15,15 +15,40 @@ class HistoricalData
     @ticker = ticker
     @period = days
     @date_prices, @high_prices, @low_prices, @close_prices = {}, [], [], []
-    origin_date = Date.today - days
-    start_month = origin_date.month - 1 # For whatever reason, months are 0-based
-    start_day = origin_date.day
-    start_year = origin_date.year
-    end_month = Date.today.month - 1
-    end_day = Date.today.day
-    end_year = Date.today.year
-    frequency = "d"
-    csv = Webpage.new("http://ichart.finance.yahoo.com/table.csv?s=#{ticker}&d=#{end_month}&e=#{end_day}&f=#{end_year}&g=#{frequency}&a=#{start_month}&b=#{start_day}&c=#{start_year}&ignore=.csv").page.text
+    @origin_date = Date.today - days
+    @start_month = @origin_date.month - 1 # For whatever reason, months are 0-based
+    @start_day = @origin_date.day
+    @start_year = @origin_date.year
+    @end_month = Date.today.month - 1
+    @end_day = Date.today.day
+    @end_year = Date.today.year
+    @frequency = "d"
+  end
+
+  def date_prices
+    retrieve_historical_prices if @date_prices.size == 0
+    @date_prices
+  end
+
+  def high_prices
+    retrieve_historical_prices if @high_prices.size == 0
+    @high_prices
+  end
+
+  def low_prices
+    retrieve_historical_prices if @low_prices.size == 0
+    @low_prices
+  end
+
+  def close_prices
+    retrieve_historical_prices if @close_prices.size == 0
+    @close_prices
+  end
+
+  private
+
+  def retrieve_historical_prices
+    csv = Webpage.new("http://ichart.finance.yahoo.com/table.csv?s=#{@ticker}&d=#{@end_month}&e=#{@end_day}&f=#{@end_year}&g=#{@frequency}&a=#{@start_month}&b=#{@start_day}&c=#{@start_year}&ignore=.csv").page.text
     extract_prices(csv)
   end
 

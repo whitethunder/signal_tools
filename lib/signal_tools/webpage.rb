@@ -19,6 +19,7 @@ class Webpage
     rescue OpenURI::HTTPError
       tries += 1
       retry if tries < 3
+      nil
     end
   end
 

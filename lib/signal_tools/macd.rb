@@ -49,8 +49,6 @@ class MACD < Common
 
   # Returns an array with the differences between the fast and slow points
   def get_fast_slow_differences(fast_points, slow_points)
-require 'ruby-debug'
-debugger
     raise unless fast_points.size > slow_points.size
     fast_points.slice!(0...(fast_points.size - slow_points.size))
     points = []

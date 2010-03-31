@@ -19,8 +19,6 @@ class Stochastic < Common
   def get_stochastic_points(k_period, d_period)
     fast_k_points = calculate_fast_stochastic_k_points(k_period)
     fast_d_points = calculate_d_points(fast_k_points, d_period)
-    require 'ruby-debug'
-    debugger
     @fast_stochastic = get_k_d_points(fast_k_points, fast_d_points)
     @slow_stochastic = get_slow_stochastic_points(d_period)
   end
