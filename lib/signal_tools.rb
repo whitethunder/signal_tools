@@ -3,44 +3,49 @@ require 'signal_tools/common'
 require 'signal_tools/macd'
 require 'signal_tools/stochastic'
 require 'signal_tools/ema'
+require 'signal_tools/average_true_range'
 require 'signal_tools/historical_data'
 
 module SignalTools
   #TODO: Determine signal strength
-#  attr_accessor :historical_data_cache, :macd_cache, :stochastic_cache, :ema_cache, :high_prices, :low_prices, :close_prices, :historical_data
-  Extra_Days = 60
-  @historical_data_cache, @macd_cache, @stochastic_cache, @ema_cache = {}, {}, {}, {}
+  @historical_data_cache, @macd_cache, @stochastic_cache, @ema_cache, @average_true_range_cache = {}, {}, {}, {}, {}
   @high_prices, @low_prices, @close_prices = [], [], []
 
   class << self
 
-    def initialize(ticker, days)
-      @historical_data = @historical_data_cache[cache_symbol([ticker, days])] ||= HistoricalData.new(ticker, days + Extra_Days)
+    def initialize(ticker, from_date)
+      @historical_data = @historical_data_cache[cache_symbol([ticker, from_date])] ||= HistoricalData.new(ticker, from_date)
       @high_prices = @historical_data.high_prices
       @low_prices = @historical_data.low_prices
       @close_prices = @historical_data.close_prices
     end
 
-    def macd(ticker, period = 90, fast = 8, slow = 17, signal = 9)
-      initialize(ticker, period)
-      @macd_cache[cache_symbol(ticker, period, fast, slow, signal)] ||= MACD.new(fast, slow, signal, @historical_data)
+    def macd(ticker, from_date, fast = 8, slow = 17, signal = 9)
+      initialize(ticker, from_date)
+      @macd_cache[cache_symbol(ticker, from_date, fast, slow, signal)] ||= MACD.new(fast, slow, signal, @historical_data)
     end
 
-    def stochastic(ticker, period = 90, k = 14, d = 5)
-      initialize(ticker, period)
-      @stochastic_cache[cache_symbol(ticker, period, k, d)] ||= Stochastic.new(k, d, @historical_data)
+    def stochastic(ticker, from_date, k = 14, d = 5)
+      initialize(ticker, from_date)
+      @stochastic_cache[cache_symbol(ticker, from_date, k, d)] ||= Stochastic.new(k, d, @historical_data)
     end
 
-    def ema(ticker, period = 90, days = 10)
-      initialize(ticker, period)
-      @ema_cache[cache_symbol(ticker, period, days)] ||= EMA.new(days, @historical_data)
+    def ema(ticker, from_date, days = 10)
+      initialize(ticker, from_date)
+      @ema_cache[cache_symbol(ticker, from_date, days)] ||= EMA.new(days, @historical_data)
     end
 
-    def get_signals(ticker, period = 90)
-      puts "Generating default signals for #{ticker} over the last #{period} days:"
-      last_macd = macd(ticker, period).macd_divergence_points[:divergence_points].last
-      s = stochastic(ticker, period)
-      e = ema(ticker, period)
+    def average_true_range(ticker, from_date, days = 14)
+      initialize(ticker, from_date)
+      @average_true_range_cache[cache_symbol(ticker, from_date, days)] ||= AverageTrueRange.new(from_date, days, @historical_data)
+    end
+
+    #temp
+    def get_signals(ticker, from_date)
+      puts "Generating default signals for #{ticker} since #{from_date}:"
+      last_macd = macd(ticker, from_date).macd_divergence_points[:divergence_points].last
+      s = stochastic(ticker, from_date)
+      e = ema(ticker, from_date)
       puts "MACD: #{last_macd}"
       puts "Slow Stochastic %k/%d: #{s.slow_stochastic[0].last} #{s.slow_stochastic[1].last}"
       puts "10-day EMA/Last Closing Price: #{e.emas.last} #{@close_prices.last}"

@@ -10,7 +10,6 @@ class MACD < Common
 
   #Takes a period of days for fast, slow, signal, and time period (eg 8,17,9).
   def get_macd_points(fast, slow, signal)
-    price_period = [fast, slow, signal, @period].max
     # We require about 45 extra data points to get the first desired point accurate.
     # In the future when we store all this information, we can just seed it and then
     # calculate from the desired point
