@@ -8,19 +8,19 @@ class Common
   Volume         = 5
   Adjusted_Close = 6
   EMA_Seed_Days  = 10
-  attr_reader :ticker, :historical_data #, :open_prices, :high_prices, :low_prices, :close_prices
+  attr_reader :ticker, :high_prices, :low_prices, :close_prices #,:historical_data, :open_prices
 
   def initialize(ticker, historical_data)
     @open_prices, @high_prices, @low_prices, @close_prices = [], [], [], []
     @ticker = ticker
-    @historical_data = historical_data
+#    @historical_data = historical_data
 #    @date = historical_data.date
 
 # TODO: seperate these into their own methods?
     historical_data.each do |hd|
-#      @open_prices  << [hd[Date], hd[Open]]
-#      @high_prices  << [hd[Date], hd[High]]
-#      @low_prices   << [hd[Date], hd[Low]]
+#      @open_prices  << hd[Open].to_f
+      @high_prices  << hd[High].to_f
+      @low_prices   << hd[Low].to_f
       @close_prices << hd[Close].to_f
 #      @volumes      << [hd[Date], hd[Volume]]
     end
@@ -53,20 +53,20 @@ class Common
     (current - previous) * (2.0 / (period + 1)) + previous
   end
 
-#  def get_for_period(points, start, finish, method)
-#    points.slice(start..finish).send(method)
-#  end
+  def get_for_period(points, start, finish, method)
+    points.slice(start..finish).send(method)
+  end
 
-#  def get_collection_for_array(points, period, method)
-#    raise unless points.size >= period
-#    collection = []
-#    index = 0
-#    while((index + period - 1) < points.size)
-#      collection << get_for_period(points, index, (index + period - 1), method)
-#      index += 1
-#    end
-#    collection
-#  end
+  def get_collection_for_array(points, period, method)
+    raise unless points.size >= period
+    collection = []
+    index = 0
+    while((index + period - 1) < points.size)
+      collection << get_for_period(points, index, (index + period - 1), method)
+      index += 1
+    end
+    collection
+  end
 
 #  # Determine date of the trading day that is 'days' before date, where date is a Date object.
 #  def date_for_trading_day_before(date, days)

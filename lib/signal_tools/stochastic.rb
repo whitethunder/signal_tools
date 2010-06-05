@@ -8,22 +8,23 @@ class Stochastic < Common
   #Slow Stochastic
   #slow %K = fast %D
   #slow %D = average(fast %D, 5)
-  attr_reader :fast_stochastic, :slow_stochastic
+  attr_reader :fast, :slow
   Slow_K_SMA = 3
 
-  def initialize(k, d, historical_data)
-    super(historical_data)
+  def initialize(ticker, k, d, historical_data)
+    super(ticker, historical_data)
     get_stochastic_points(k, d)
   end
+
+  private
 
   def get_stochastic_points(k_period, d_period)
     fast_k_points = calculate_fast_stochastic_k_points(k_period)
     fast_d_points = calculate_d_points(fast_k_points, d_period)
-    @fast_stochastic = get_k_d_points(fast_k_points, fast_d_points)
-    @slow_stochastic = get_slow_stochastic_points(d_period)
+    @fast = get_k_d_points(fast_k_points, fast_d_points)
+    @slow = get_slow_stochastic_points(d_period)
   end
 
-  private
 
   def calculate_fast_stochastic_k_points(period)
     index = 0
@@ -39,8 +40,8 @@ class Stochastic < Common
   end
 
   def get_slow_stochastic_points(d_period)
-    raise unless @fast_stochastic
-    slow_k_points = get_slow_k_points(@fast_stochastic[0])
+    raise unless @fast
+    slow_k_points = get_slow_k_points(@fast[:k])
     slow_d_points = calculate_d_points(slow_k_points, d_period)
     get_k_d_points(slow_k_points, slow_d_points)
   end
@@ -52,7 +53,7 @@ class Stochastic < Common
   def get_k_d_points(k_points, d_points)
     raise unless k_points.size > d_points.size
     k_points = k_points.slice((k_points.size - d_points.size)..-1)
-    [k_points, d_points]
+    {:k => k_points, :d => d_points}
   end
 
   def get_slow_k_points(fast_k_points)

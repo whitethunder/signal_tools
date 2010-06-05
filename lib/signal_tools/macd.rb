@@ -5,15 +5,15 @@ class MACD < Common
 
   def initialize(ticker, fast, slow, signal, historical_data)
     super(ticker, historical_data)
-    get_macd_points(fast, slow, signal)
+    get_macd_points(fast, slow, signal, @close_prices)
   end
 
   private
 
   # Takes a period of days for fast, slow, signal, and time period (eg 8,17,9).
-  def get_macd_points(fast, slow, signal)
-    fast_ema_points = get_ema_points(fast, @close_prices)
-    slow_ema_points = get_ema_points(slow, @close_prices)
+  def get_macd_points(fast, slow, signal, data)
+    fast_ema_points = get_ema_points(fast, data)
+    slow_ema_points = get_ema_points(slow, data)
     @macd, @divergence = get_macd_and_divergence_points(fast_ema_points, slow_ema_points, signal)
   end
 

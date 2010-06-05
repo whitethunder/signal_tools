@@ -29,10 +29,10 @@ module SignalTools
       @macd_cache[cache_symbol(ticker, from_date, to_date, fast, slow, signal)] ||= MACD.new(ticker, fast, slow, signal, @historical_data)
     end
 
-#    def stochastic(ticker, from_date, to_date=Date.today, k=14, d=5)
-#      initialize(ticker, from_date, to_date)
-#      @stochastic_cache[cache_symbol(ticker, from_date, to_date, k, d)] ||= Stochastic.new(ticker, k, d, @historical_data)
-#    end
+    def stochastic(ticker, from_date, to_date=Date.today, k=14, d=5)
+      initialize(ticker, from_date, to_date)
+      @stochastic_cache[cache_symbol(ticker, from_date, to_date, k, d)] ||= Stochastic.new(ticker, k, d, @historical_data)
+    end
 
 #    def average_true_range(ticker, from_date, to_date, days=14)
 #      initialize(ticker, from_date, to_date)
