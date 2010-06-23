@@ -21,16 +21,19 @@ class MACD < Common
     macd_points = get_differences(fast_ema_points, slow_ema_points)
     signal_points = get_ema_points(signal, macd_points)
     divergences = get_differences(macd_points, signal_points)
-    [macd_points, divergences]
+    [signal_points, divergences]
   end
 
   # Returns an array with the differences between the first_points and second_points
   def get_differences(first_points, second_points)
-    if first_points.size > second_points.size
-      first_points.slice!(0...(first_points.size - second_points.size))
-    elsif second_points.size > first_points.size
-      second_points.slice!(0...(second_points.size - first_points.size))
-    end
-    first_points.map { |fast| fast - second_points.shift }
+    Array.truncate_to_shortest!(first_points, second_points)
+#    if first_points.size > second_points.size
+#      first_points.slice!(0...(first_points.size - second_points.size))
+#    elsif second_points.size > first_points.size
+#      second_points.slice!(0...(second_points.size - first_points.size))
+#    end
+    differences = []
+    first_points.each_with_index { |fp, index| differences << fp - second_points[index] }
+    differences
   end
 end

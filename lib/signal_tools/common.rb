@@ -8,6 +8,8 @@ class Common
   Volume         = 5
   Adjusted_Close = 6
   EMA_Seed_Days  = 10
+  ATR_Seed_Days = 14
+
   attr_reader :ticker, :high_prices, :low_prices, :close_prices #,:historical_data, :open_prices
 
   def initialize(ticker, historical_data)
@@ -27,24 +29,18 @@ class Common
   end
 
   def get_ema_points(period, data)
-    calculate_emas_for_data(period, data)
+    emas = [get_default_simple_average(data, EMA_Seed_Days)]
+    data.slice(EMA_Seed_Days..-1).each { |current| emas << calculate_ema(emas.last, current, period) }
+    emas
 #    dates = sorted_date_price_keys
 #    from_date_index = sorted_date_price_keys.index(from_date)
 #    emas = calculate_emas_for_dates(dates.slice((from_date_index - HistoricalData::Extra_Days + EMA_Seed_Days)..-1), get_ema_default(from_date_index), ema_period)
 #    emas.delete_if { |k,v| k < from_date }
   end
 
-  #Iterates over a data set and calculates the exponential moving average for
-  #each point.
-  def calculate_emas_for_data(period, data)
-    emas = [get_ema_default(data)]
-    data.slice(EMA_Seed_Days..-1).each { |current| emas << calculate_ema(emas.last, current, period) }
-    emas
-  end
-
   # Gets the first EMA_Seed_Days of numbers from data and returns a simple average.
-  def get_ema_default(data)
-    data.slice(0...EMA_Seed_Days).average
+  def get_default_simple_average(data, period)
+    data.slice(0...period).average
   end
 
   #Takes current value, previous day's EMA, and number of days. Returns EMA for
@@ -66,6 +62,42 @@ class Common
       index += 1
     end
     collection
+  end
+
+   # Takes a smoothing period and historical data and calculates the average
+   # true ranges.
+  def average_true_ranges(period, data)
+    true_ranges = get_true_ranges(data)
+    atrs = [get_default_simple_average(true_ranges.slice!(0...ATR_Seed_Days), ATR_Seed_Days)]
+    true_ranges.each { |tr| atrs << calculate_average_true_range(atrs.last, tr, period) }
+    atrs
+  end
+
+  # Takes yesterday's average true range, today's true range, and the smoothing
+  # period and calculates the day's average true range.
+  def calculate_average_true_range(yesterday_atr, today_tr, period)
+    #ATR = ((PrevATR * 13) + TodayTR) / 14
+    (yesterday_atr * (period - 1) + today_tr) / period
+  end
+
+  # Takes historical data and computes the true ranges.
+  def get_true_ranges(data)
+    true_ranges = [data.first[High] - data.first[Low]]
+    index = 1
+    while index < (data.size)
+      true_ranges << true_range(data[index], data[index-1])
+      index += 1
+    end
+    true_ranges
+  end
+
+  # Takes today's data and yesterday's data and computes the true range.
+  def true_range(today, yesterday)
+    [
+      today[High] - today[Low],
+      (today[High] - yesterday[Close]).abs,
+      (today[Low] - yesterday[Close]).abs
+    ].max
   end
 
 #  # Determine date of the trading day that is 'days' before date, where date is a Date object.

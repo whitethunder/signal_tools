@@ -7,10 +7,10 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'signal_tools'
 
 class Test::Unit::TestCase
-  def get_historical_data
+  def get_historical_data(repeat=5)
     historical_data = []
     (SignalTools::Extra_Days).downto(0) do |i|
-      seed = i % 5 + 1
+      seed = i % repeat + 1
       historical_data << [
         (Date.today-i).to_s,
         seed * 0.8, #Open

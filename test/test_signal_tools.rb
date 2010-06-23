@@ -11,8 +11,9 @@ class TestSignalTools < Test::Unit::TestCase
 #    setup_historical_data(@ticker, days, @start_date.strftime)
   end
 
-  def test_the_truth
-    assert(true)
+  def test_cache_symbol
+    symbol = SignalTools.cache_symbol('wtf', 'omg', 'lol', '1337')
+    assert_equal(:wtf_omg_lol_1337, symbol)
   end
 
 #  def test_stochastic_should_return_valid_and_correct_slow_and_fast_stochastic_points

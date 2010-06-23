@@ -13,6 +13,13 @@ class Array
     a.sum.to_f / a.size
   end
 
+  # Truncates all arrays to the size of the shortest array by cutting off the front
+  # of the longer arrays.
+  def self.truncate_to_shortest!(*arrays)
+    shortest_size = arrays.inject(arrays.first.size) { |size, array| array.size < size ? array.size : size }
+    arrays.each { |array| array.slice!(0...(array.size - shortest_size)) }
+  end
+
 #  def geometric_mean(last = self.size)
 #    raise "Invalid parameter" if last < 0 or last > self.size
 #    a = self.slice((self.size - last)..(self.size - 1))
