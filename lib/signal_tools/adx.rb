@@ -18,11 +18,6 @@ class ADX < Common
     @adxs = calculate_adx(plus_di, minus_di, period)
   end
 
-#  dates = dates_for_period(from_date, days)
-#  (0...(dates.size)).each do |index|
-#    @average_directional_index[dates[index]] =
-#  end
-
   def calculate_adx(plus_di, minus_di, period)
 #ADX = 100 times the exponential moving average of the Absolute value of (+DI − -DI) divided by (+DI + -DI)
     index = 0

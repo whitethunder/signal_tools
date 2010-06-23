@@ -3,10 +3,6 @@ class Array
     self.inject(0) {|accum, c| accum + c.to_f }
   end
 
-#  def product
-#    self.inject {|accum, c| accum * c.to_f}
-#  end
-
   def average(last = self.size)
     raise "Invalid parameter" if last < 0 or last > self.size
     a = self.slice((self.size - last)..(self.size - 1))
@@ -19,12 +15,6 @@ class Array
     shortest_size = arrays.inject(arrays.first.size) { |size, array| array.size < size ? array.size : size }
     arrays.each { |array| array.slice!(0...(array.size - shortest_size)) }
   end
-
-#  def geometric_mean(last = self.size)
-#    raise "Invalid parameter" if last < 0 or last > self.size
-#    a = self.slice((self.size - last)..(self.size - 1))
-#    a.product.to_f ** (1.0 / a.size.to_f)
-#  end
 
 #  def average_growth
 #    total = 0.0
