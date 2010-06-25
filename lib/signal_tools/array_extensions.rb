@@ -4,7 +4,8 @@ class Array
   end
 
   def average(last = self.size)
-    raise "Invalid parameter" if last < 0 or last > self.size
+    raise "Invalid parameter" if last < 0 || last > self.size
+    return nil if self.size == 0
     a = self.slice((self.size - last)..(self.size - 1))
     a.sum.to_f / a.size
   end
