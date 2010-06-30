@@ -14,7 +14,7 @@ module SignalTools
 #  @open_prices, @high_prices, @low_prices, @close_prices, @volumes = [], [], [], [], []
 
   class << self
-
+    # Takes a ticker and two Date objects and retrieves historical data from Yahoo Finance.
     def initialize(ticker, from_date, to_date)
       @historical_data = @historical_data_cache[cache_symbol([ticker, from_date, to_date])] ||= YahooFinance::get_historical_quotes(ticker, from_date-Extra_Days, to_date).reverse
     end
