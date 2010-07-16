@@ -4,19 +4,24 @@ require 'signal_tools/macd'
 require 'signal_tools/stochastic'
 require 'signal_tools/ema'
 require 'signal_tools/atr'
-#require 'signal_tools/adx'
+require 'signal_tools/adx'
 #require 'signal_tools/historical_data'
 require 'yahoofinance'
 
 module SignalTools
   Extra_Days     = 365
-  @historical_data_cache, @macd_cache, @stochastic_cache, @ema_cache, @average_true_range_cache = {}, {}, {}, {}, {}
+  @historical_data_cache, @macd_cache, @stochastic_cache, @ema_cache, @average_true_range_cache, @adx_cache = {}, {}, {}, {}, {}, {}
 #  @open_prices, @high_prices, @low_prices, @close_prices, @volumes = [], [], [], [], []
 
   class << self
     # Takes a ticker and two Date objects and retrieves historical data from Yahoo Finance.
     def initialize(ticker, from_date, to_date)
-      @historical_data = @historical_data_cache[cache_symbol([ticker, from_date, to_date])] ||= YahooFinance::get_historical_quotes(ticker, from_date-Extra_Days, to_date).reverse
+      @historical_data = @historical_data_cache[cache_symbol([ticker, from_date, to_date])] ||= fetch_data(ticker, from_date-Extra_Days, to_date)
+    end
+
+    def fetch_data(ticker, from_date, to_date)
+      data = YahooFinance::get_historical_quotes(ticker, from_date, to_date).reverse
+      data.map { |d| [d[Common::Date_Index], d[Common::Open].to_f, d[Common::High].to_f, d[Common::Low].to_f, d[Common::Close].to_f, d[Common::Volume].to_i, d[Common::Adjusted_Close].to_f] }
     end
 
     def ema(ticker, from_date, to_date=Date.today, period=10)
@@ -39,10 +44,10 @@ module SignalTools
       @average_true_range_cache[cache_symbol(ticker, from_date, to_date, period)] ||= ATR.new(ticker, period, @historical_data)
     end
 
-#    def average_directional_index(ticker, from_date, to_date=Date.today, period=14)
-#      initialize(ticker, from_date, to_date)
-#      @average_directional_index_cache[cache_symbol(ticker, from_date, to_date, period)] ||= AverageDirectionalIndex.new(ticker, period, @historical_data)
-#    end
+    def adx(ticker, from_date, to_date=Date.today, period=14)
+      initialize(ticker, from_date, to_date)
+      @adx_cache[cache_symbol(ticker, from_date, to_date, period)] ||= ADX.new(ticker, period, @historical_data)
+    end
 
     def cache_symbol(*args)
       args = args.map(&:to_s)

@@ -54,15 +54,21 @@ class TestCommon < Test::Unit::TestCase
   end
 
   def test_true_range_returns_correct_true_range
-    yesterday = @historical_data[0]
-    today = @historical_data[1]
-    tr = @common.true_range(today, yesterday)
+    tr = @common.true_range(@historical_data[1], @historical_data[0])
     assert_equal(6.6, tr)
+    tr = @common.true_range(@historical_data[5], @historical_data[4])
+    assert_equal(1.3, tr)
+  end
+
+  def test_get_sum_emas_returns_correct_true_ranges
+    true_ranges = @common.get_period_sum_ema(@period, @common.get_true_ranges(@historical_data))
+    strings = true_ranges[-10..-1].map { |tr| "%.6f" % tr }
+    assert_equal(["48.144747", "48.705836", "48.226848", "46.782073", "44.740496", "48.144747", "48.705836", "48.226848", "46.782073", "44.740496"], strings)
   end
 
   def test_get_true_ranges_returns_a_collection_of_correct_true_ranges
     true_ranges = @common.get_true_ranges(@historical_data)
-    assert_equal([1.0, 6.6, 4.0, 3.0, 2.0, 1.3, 6.6, 4.0, 3.0, 2.0], true_ranges[0...10])
+    assert_equal([1.0, 6.6, 4.0, 3.0, 2.0, 1.3, 6.6, 4.0, 3.0, 2.0], true_ranges[0..9])
   end
 
   def test_caculate_average_true_range_returns_correct_true_range_value

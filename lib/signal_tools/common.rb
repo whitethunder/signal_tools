@@ -1,6 +1,6 @@
 class Common
   #TODO: truncate historical data in the case where it's really long (if this is applicable)
-  Date           = 0
+  Date_Index     = 0
   Open           = 1
   High           = 2
   Low            = 3
@@ -20,7 +20,7 @@ class Common
 
 # TODO: seperate these into their own methods?
     historical_data.each do |hd|
-      @dates << hd[Date]
+      @dates << hd[Date_Index]
 #      @open_prices  << hd[Open].to_f
       @high_prices  << hd[High].to_f
       @low_prices   << hd[Low].to_f
@@ -29,9 +29,13 @@ class Common
     end
   end
 
-  def get_ema_points(period, data)
+  def get_ema_points(period, data, type=:default)
     emas = [get_default_simple_average(data, EMA_Seed_Days)]
-    data.slice(EMA_Seed_Days..-1).each { |current| emas << calculate_ema(emas.last, current, period) }
+    if type == :wilder
+      data.slice(EMA_Seed_Days..-1).each { |current| emas << calculate_wilder_ema(emas.last, current, period) }
+    else
+      data.slice(EMA_Seed_Days..-1).each { |current| emas << calculate_ema(emas.last, current, period) }
+    end
     emas
   end
 
@@ -44,6 +48,11 @@ class Common
   #that day.
   def calculate_ema(previous, current, period)
     (current - previous) * (2.0 / (period + 1)) + previous
+  end
+
+  #Uses Wilder's moving average formula.
+  def calculate_wilder_ema(previous, current, period)
+    (previous * (period - 1) + current) / period
   end
 
   #Runs method for the given slice of the array.
@@ -68,8 +77,8 @@ class Common
   def true_range(today, yesterday)
     [
       today[High] - today[Low],
-      (today[High] - yesterday[Close]).abs,
-      (today[Low] - yesterday[Close]).abs
+      (yesterday[Close] - today[High]).abs,
+      (yesterday[Close] - today[Low]).abs
     ].max
   end
 
@@ -82,6 +91,16 @@ class Common
       index += 1
     end
     true_ranges
+  end
+
+  #Takes a period and array of data and calculates the sum ema over the period specified.
+  def get_period_sum_ema(period, data)
+    raise if data.size <= period
+    sum_emas = [data[0...period].sum]
+    data[(period..-1)].each do |today|
+      sum_emas << (sum_emas.last - (sum_emas.last / period) + today)
+    end
+    sum_emas
   end
 
   # Takes yesterday's average true range, today's true range, and the smoothing
