@@ -1,15 +1,16 @@
 require 'rubygems'
 require 'test/unit'
-require 'shoulda'
+require 'flexmock/test_unit'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'signal_tools'
 
 class Test::Unit::TestCase
-  def get_historical_data(repeat=5)
+  def test_data(period)
+    repeat = 5
     historical_data = []
-    (SignalTools::Extra_Days).downto(0) do |i|
+    (0...SignalTools::StockData::Extra_Days+period).each do |i|
       seed = i % repeat + 1
       historical_data << [
         (Date.today-i).to_s,
