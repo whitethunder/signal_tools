@@ -14,10 +14,10 @@ class Test::Unit::TestCase
       seed = i % repeat + 1
       historical_data << [
         (Date.today-i).to_s,
-        seed * 0.8, #Open
-        seed * 1.5, #High
-        seed * 0.5, #Low
-        seed * 0.9  #Close
+        (seed * 0.8).to_s, #Open
+        (seed * 1.5).to_s, #High
+        (seed * 0.5).to_s, #Low
+        (seed * 0.9).to_s  #Close
       ]
     end
     historical_data

@@ -10,14 +10,16 @@ module SignalTools
       :high           => 2,
       :low            => 3,
       :close          => 4,
-      :volume         => 5,
-      :adjusted_close => 6
+#Presently unused
+#      :volume         => 5,
+#      :adjusted_close => 6
     }
     attr_reader :raw_data
 
     #Downloads historical prices using the YahooFinance gem.
     def initialize(ticker, from_date, to_date)
       @raw_data = YahooFinance::get_historical_quotes(ticker, from_date, to_date).reverse
+      raw_data_strings_to_floats!
     end
 
     def dates
@@ -38,6 +40,17 @@ module SignalTools
 
     def close_prices
       @close_prices ||= @raw_data.map { |d| d[Indexes[:close]] }
+    end
+
+    private
+
+    def raw_data_strings_to_floats!(*indexes)
+      @raw_data.each do |datum|
+        datum[Indexes[:open]] = datum[Indexes[:open]].to_f
+        datum[Indexes[:high]] = datum[Indexes[:high]].to_f
+        datum[Indexes[:low]] = datum[Indexes[:low]].to_f
+        datum[Indexes[:close]] = datum[Indexes[:close]].to_f
+      end
     end
   end
 end
