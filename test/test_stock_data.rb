@@ -8,7 +8,7 @@ class TestStockData < Test::Unit::TestCase
     @total_days = days + SignalTools::StockData::Extra_Days
     @from_date = Date.today - days
     @to_date = Date.today
-    flexmock(YahooFinance).should_receive(:get_historical_quotes).with_any_args.and_return(test_data(days))
+    flexmock(YahooFinance).should_receive(:get_historical_quotes).with_any_args.and_return(data_for_tests(days))
     @stock_data = SignalTools::StockData.new(ticker, @from_date, @to_date)
   end
 

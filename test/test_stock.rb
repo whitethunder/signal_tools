@@ -5,7 +5,7 @@ class TestStock < Test::Unit::TestCase
   def setup
     ticker = "TESTING"
     @days = 30
-    flexmock(YahooFinance).should_receive(:get_historical_quotes).with_any_args.and_return(test_data(@days))
+    flexmock(YahooFinance).should_receive(:get_historical_quotes).with_any_args.and_return(data_for_tests(@days))
     @stock = SignalTools::Stock.new(ticker)
   end
 

@@ -7,7 +7,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'signal_tools'
 
 class Test::Unit::TestCase
-  def test_data(period)
+  def data_for_tests(period)
     repeat = 5
     historical_data = []
     (0...SignalTools::StockData::Extra_Days+period).each do |i|
