@@ -1,22 +1,6 @@
 require 'rubygems'
 require 'rake'
 
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "signal_tools"
-    gem.summary = %Q{Create technical analysis data for a given security.}
-    gem.description = %Q{Gem to create technical analysis data for a given security (like MACD, stochastic, and exponential moving averages).}
-    gem.email = "mattw922@gmail.com"
-    gem.homepage = "http://github.com/whitethunder/signal_tools"
-    gem.authors = ["Matt White"]
-    gem.add_dependency "yahoofinance"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
-  end
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
-end
-
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'

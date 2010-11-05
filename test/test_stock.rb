@@ -4,7 +4,7 @@ require 'signal_tools'
 class TestStock < Test::Unit::TestCase
   def setup
     ticker = "TESTING"
-    @days = 30
+    @days = 90
     flexmock(YahooFinance).should_receive(:get_historical_quotes).with_any_args.and_return(data_for_tests(@days))
     @stock = SignalTools::Stock.new(ticker)
   end
@@ -62,5 +62,15 @@ class TestStock < Test::Unit::TestCase
   def test_adx
     assert_equal "0.491321", "%.6f" % @stock.adx[-1]
     assert_equal "0.496588", "%.6f" % @stock.adx[-5]
+  end
+
+  def test_stock_should_have_correct_number_of_data_elements
+    assert_equal(@days+1, @stock.dates.size)
+    assert_equal(@days+1, @stock.ema.size)
+    assert_equal(@days+1, @stock.macd[:divergences].size)
+    assert_equal(@days+1, @stock.fast_stochastic[:k].size)
+    assert_equal(@days+1, @stock.slow_stochastic[:k].size)
+    assert_equal(@days+1, @stock.atr.size)
+    assert_equal(@days+1, @stock.adx.size)
   end
 end

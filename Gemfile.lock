@@ -1,0 +1,33 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    ZenTest (4.4.0)
+    archive-tar-minitar (0.5.2)
+    columnize (0.3.1)
+    flexmock (0.8.11)
+    linecache19 (0.5.11)
+      ruby_core_source (>= 0.1.4)
+    rake (0.8.7)
+    ruby-debug-base19 (0.11.24)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby_core_source (>= 0.1.4)
+    ruby-debug19 (0.11.6)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby-debug-base19 (>= 0.11.19)
+    ruby_core_source (0.1.4)
+      archive-tar-minitar (>= 0.5.2)
+    test_notifier (0.3.4)
+    yahoofinance (1.2.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ZenTest
+  flexmock
+  rake
+  ruby-debug19
+  test_notifier
+  yahoofinance

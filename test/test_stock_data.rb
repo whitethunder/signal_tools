@@ -4,17 +4,17 @@ require 'signal_tools'
 class TestStockData < Test::Unit::TestCase
   def setup
     ticker = "TESTING"
-    days = 30
-    @total_days = days + SignalTools::StockData::Extra_Days
-    @from_date = Date.today - days
+    @days = 90
+    @total_days = @days + SignalTools::StockData::Extra_Days
+    @from_date = Date.today - @days
     @to_date = Date.today
-    flexmock(YahooFinance).should_receive(:get_historical_quotes).with_any_args.and_return(data_for_tests(days))
+    flexmock(YahooFinance).should_receive(:get_historical_quotes).with_any_args.and_return(data_for_tests(@days))
     @stock_data = SignalTools::StockData.new(ticker, @from_date, @to_date)
   end
 
   def test_dates
     new_dates = []
-    (0...@total_days).each { |i| new_dates.unshift((@to_date - i).to_s) }
+    (0..@days).each { |i| new_dates.unshift((@to_date - i)) }
     assert_equal new_dates, @stock_data.dates
   end
 
