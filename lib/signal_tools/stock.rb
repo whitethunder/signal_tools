@@ -15,33 +15,37 @@ module SignalTools
       @stock_data = SignalTools::StockData.new(ticker, from_date, to_date)
     end
 
+    # Takes a period of days over which to average closing prices and returns the exponential moving average for each day.
+    def ema(period=10)
+      trim_data_to_range!(ema_points(period, @stock_data.close_prices))
+    end
+
+    def macd(fast=8, slow=17, signal=9)
+      trim_data_to_range!(macd_points(fast, slow, signal))
+    end
+
+    def fast_stochastic(k=14, d=5)
+      trim_data_to_range!(fast_stochastic_points(k, d))
+    end
+
+    def slow_stochastic(k=14, d=5)
+      trim_data_to_range!(slow_stochastic_points(k, d))
+    end
+
+    def atr(period=14)
+      trim_data_to_range!(average_true_ranges(period))
+    end
+
+    def adx(period=14)
+      trim_data_to_range!(average_directional_indexes(period))
+    end
+
     def dates
       @stock_data.dates
     end
 
-    # Takes a period of days over which to average closing prices and returns the exponential moving average for each day.
-    def ema(period=10)
-      trim_data_to_range(ema_points(period, @stock_data.close_prices))
-    end
-
-    def macd(fast=8, slow=17, signal=9)
-      trim_data_to_range(macd_points(fast, slow, signal))
-    end
-
-    def fast_stochastic(k=14, d=5)
-      trim_data_to_range(fast_stochastic_points(k, d))
-    end
-
-    def slow_stochastic(k=14, d=5)
-      trim_data_to_range(slow_stochastic_points(k, d))
-    end
-
-    def atr(period=14)
-      trim_data_to_range(average_true_ranges(period))
-    end
-
-    def adx(period=14)
-      trim_data_to_range(average_directional_indexes(period))
+    def close_prices
+      @close_prices = trim_data_to_range(@stock_data.close_prices)
     end
 
     private
@@ -263,13 +267,17 @@ module SignalTools
     #### Misc Utility Methods
 
     # Returns only the points specific to the date range given.
-    def trim_data_to_range(data)
+    def trim_data_to_range!(data)
       if data.is_a? Array
         data.slice!(0...(-dates.size))
       elsif data.is_a? Hash
         data.each { |k,v| v = v.slice!(0...(-dates.size)) }
       end
       data
+    end
+
+    def trim_data_to_range(data)
+      data.slice((dates.size)..-1)
     end
 
     # Gets the first 0...period of numbers from data and returns a simple average.
@@ -298,12 +306,6 @@ module SignalTools
         index += 1
       end
       collection
-    end
-
-    def matching_dates(array)
-      dates = @stock_data.dates.dup
-      SignalTools.truncate_to_shortest!(dates, array)
-      @dates = dates
     end
   end
 end

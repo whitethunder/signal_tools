@@ -1,6 +1,5 @@
 source "http://rubygems.org"
 
-gem 'rake'
 gem 'yahoofinance'
 
 group :development, :test do
@@ -8,4 +7,5 @@ group :development, :test do
   gem 'flexmock'
   gem 'ZenTest'
   gem 'test_notifier'
+  gem 'flog'
 end
