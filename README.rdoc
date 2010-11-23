@@ -4,24 +4,24 @@ Signal tools allows you to create technical analysis data for a given stock (lik
 
 == Installation
 
-gem install signal_tools
-bundle install --without development test
+    gem install signal_tools
+    bundle install --without development test
 
 == Usage
 
-require 'signal_tools'
+    require 'signal_tools'
 
-stock = SignalTools::Stock.new('GOOG', '2010-01-01', '2010-05-31')
-# Leave the last parameter blank to get from a previous date up until today:
-stock = SignalTools::Stock.new('GOOG', '2010-01-01')
-# Leave both dates blank to get the past 90 days:
-stock = SignalTools::Stock.new('GOOG')
+    stock = SignalTools::Stock.new('GOOG', '2010-01-01', '2010-05-31')
+    # Leave the last parameter blank to get from a previous date up until today:
+    stock = SignalTools::Stock.new('GOOG', '2010-01-01')
+    # Leave both dates blank to get the past 90 days:
+    stock = SignalTools::Stock.new('GOOG')
 
-# Generate MACD signal with an 8 day short period, 17 day long period, and 9 day EMA signal period:
-stock.macd(8, 17, 9)
+    # Generate MACD signal with an 8 day short period, 17 day long period, and 9 day EMA signal period:
+    stock.macd(8, 17, 9)
 
-# Generate slow stochastic signal with a 14 day K period and a 5 day D period:
-stock.slow_stochastic(14, 5)
+    # Generate slow stochastic signal with a 14 day K period and a 5 day D period:
+    stock.slow_stochastic(14, 5)
 
 == Note on Patches/Pull Requests
 
