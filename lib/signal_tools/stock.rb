@@ -269,15 +269,15 @@ module SignalTools
     # Returns only the points specific to the date range given.
     def trim_data_to_range!(data)
       if data.is_a? Array
-        data.slice!(0...(-dates.size))
+        data.slice!(0..(-dates.size-1))
       elsif data.is_a? Hash
-        data.each { |k,v| v = v.slice!(0...(-dates.size)) }
+        data.each { |k,v| v = v.slice!(0..(-dates.size-1)) }
       end
       data
     end
 
     def trim_data_to_range(data)
-      data.slice((dates.size)..-1)
+      data.slice((-dates.size+1)..-1)
     end
 
     # Gets the first 0...period of numbers from data and returns a simple average.

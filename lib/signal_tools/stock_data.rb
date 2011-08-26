@@ -56,7 +56,7 @@ module SignalTools
     def trim_dates
       dates = @raw_data.map { |d| d[Indexes[:date]] }
       index = binary_search_for_date_index(dates)
-      dates[index..-1]
+      dates[(index+1)..-1]
     end
 
     # Performs a binary search for @from_date on @dates. Returns the index of @from_date.
