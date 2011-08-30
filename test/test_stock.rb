@@ -65,12 +65,12 @@ class TestStock < Test::Unit::TestCase
   end
 
   def test_stock_should_have_correct_number_of_data_elements
-    assert_equal(@days+1, @stock.dates.size)
-    assert_equal(@days+1, @stock.ema.size)
-    assert_equal(@days+1, @stock.macd[:divergences].size)
-    assert_equal(@days+1, @stock.fast_stochastic[:k].size)
-    assert_equal(@days+1, @stock.slow_stochastic[:k].size)
-    assert_equal(@days+1, @stock.atr.size)
-    assert_equal(@days+1, @stock.adx.size)
+    assert_equal(@days, @stock.dates.size)
+    assert_equal(@days, @stock.ema.size)
+    assert_equal(@days, @stock.macd[:divergences].size)
+    assert_equal(@days, @stock.fast_stochastic[:k].size)
+    assert_equal(@days, @stock.slow_stochastic[:k].size)
+    assert_equal(@days, @stock.atr.size)
+    assert_equal(@days, @stock.adx.size)
   end
 end

@@ -14,7 +14,7 @@ class TestStockData < Test::Unit::TestCase
 
   def test_dates
     new_dates = []
-    (0..@days).each { |i| new_dates.unshift((@to_date - i)) }
+    (0...@days).each { |i| new_dates.unshift(@to_date - i) }
     assert_equal new_dates, @stock_data.dates
   end
 
