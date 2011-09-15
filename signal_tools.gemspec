@@ -1,5 +1,3 @@
-require File.expand_path("../lib/signal_tools", __FILE__)
-
 Gem::Specification.new do |gem|
   gem.name    = 'signal_tools'
   gem.version = '0.2.2'
