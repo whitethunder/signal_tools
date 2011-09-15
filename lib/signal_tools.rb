@@ -1,9 +1,7 @@
-require File.expand_path("../signal_tools/stock_data", __FILE__)
-require File.expand_path("../signal_tools/stock", __FILE__)
+require "signal_tools/stock_data"
+require "signal_tools/stock"
 
 module SignalTools
-  VERSION = '0.2.0'
-
   def self.sum(array)
     array.inject(0) {|accum, c| accum + c.to_f }
   end
