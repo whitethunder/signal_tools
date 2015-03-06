@@ -1,15 +1,16 @@
-require 'test_helper'
-require 'signal_tools'
+require './test/test_helper'
 
-class TestStockData < Test::Unit::TestCase
+class TestStockData < Minitest::Test
   def setup
     ticker = "TESTING"
     @days = 90
     @total_days = @days + SignalTools::StockData::Extra_Days
     @from_date = Date.today - @days
     @to_date = Date.today
-    flexmock(YahooFinance).should_receive(:get_historical_quotes).with_any_args.and_return(data_for_tests(@days))
-    @stock_data = SignalTools::StockData.new(ticker, @from_date, @to_date)
+
+    YahooFinance.stub(:get_historical_quotes, data_for_tests(@days)) do
+      @stock_data = SignalTools::StockData.new(ticker, @from_date, @to_date)
+    end
   end
 
   def test_dates

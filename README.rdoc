@@ -33,4 +33,4 @@ Signal tools allows you to create technical analysis data for a given stock (lik
 
 == Copyright
 
-Copyright (c) 2010 Matt White.
+Copyright (c) 2015 Matt White.

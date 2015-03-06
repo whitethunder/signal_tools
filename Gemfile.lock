@@ -1,38 +1,18 @@
-GEM
-  remote: http://rubygems.org/
+PATH
+  remote: .
   specs:
-    ZenTest (4.4.0)
-    archive-tar-minitar (0.5.2)
-    columnize (0.3.2)
-    flexmock (0.8.11)
-    flog (2.5.0)
-      ruby_parser (~> 2.0)
-      sexp_processor (~> 3.0)
-    linecache19 (0.5.11)
-      ruby_core_source (>= 0.1.4)
-    ruby-debug-base19 (0.11.24)
-      columnize (>= 0.3.1)
-      linecache19 (>= 0.5.11)
-      ruby_core_source (>= 0.1.4)
-    ruby-debug19 (0.11.6)
-      columnize (>= 0.3.1)
-      linecache19 (>= 0.5.11)
-      ruby-debug-base19 (>= 0.11.19)
-    ruby_core_source (0.1.4)
-      archive-tar-minitar (>= 0.5.2)
-    ruby_parser (2.0.5)
-      sexp_processor (~> 3.0)
-    sexp_processor (3.0.5)
-    test_notifier (0.3.4)
+    signal_tools (0.3.0)
+      yahoofinance (~> 1.2.0, >= 1.2.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    minitest (5.5.0)
     yahoofinance (1.2.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  ZenTest
-  flexmock
-  flog
-  ruby-debug19
-  test_notifier
-  yahoofinance
+  minitest (~> 5.5.0, >= 5.5.0)
+  signal_tools!

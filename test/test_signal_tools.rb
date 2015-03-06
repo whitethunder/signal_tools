@@ -1,7 +1,6 @@
-require 'test_helper'
-require 'signal_tools'
+require './test/test_helper'
 
-class TestSignalTools < Test::Unit::TestCase
+class TestSignalTools < Minitest::Test
   def setup
     @array1 = [1,2,3,4,5,6,7,8,9,10]
   end

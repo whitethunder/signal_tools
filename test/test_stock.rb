@@ -1,12 +1,13 @@
-require 'test_helper'
-require 'signal_tools'
+require './test/test_helper'
 
-class TestStock < Test::Unit::TestCase
+class TestStock < Minitest::Test
   def setup
     ticker = "TESTING"
     @days = 90
-    flexmock(YahooFinance).should_receive(:get_historical_quotes).with_any_args.and_return(data_for_tests(@days))
-    @stock = SignalTools::Stock.new(ticker)
+
+    YahooFinance.stub(:get_historical_quotes, data_for_tests(@days)) do
+      @stock = SignalTools::Stock.new(ticker)
+    end
   end
 
   def test_ema
